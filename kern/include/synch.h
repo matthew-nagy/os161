@@ -49,6 +49,7 @@ struct semaphore {
 	struct spinlock sem_lock;
 	volatile unsigned sem_count;
 };
+typedef struct semaphore Semaphore;
 
 struct semaphore *sem_create(const char *name, unsigned initial_count);
 void sem_destroy(struct semaphore *);
@@ -80,7 +81,7 @@ struct lock {
 
 
         char * owner
-        struct semaphore* locksLock;
+        Semaphore* locksLock;
 };
 
 struct lock *lock_create(const char *name);
