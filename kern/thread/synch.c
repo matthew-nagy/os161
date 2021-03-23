@@ -186,7 +186,7 @@ lock_acquire(struct lock *lock)
 void
 lock_release(struct lock *lock)
 {
-	K(lock->locksLock);
+	V(lock->locksLock);
 	lock->owner = NULL;
 }
 
