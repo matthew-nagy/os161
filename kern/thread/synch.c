@@ -39,8 +39,6 @@
 #include <thread.h>
 #include <current.h>
 #include <synch.h>
-#include <stdlib.h>
-
 ////////////////////////////////////////////////////////////
 //
 // Semaphore.
