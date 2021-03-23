@@ -39,6 +39,7 @@
 #include <thread.h>
 #include <current.h>
 #include <synch.h>
+#include <stdlib.h>
 
 ////////////////////////////////////////////////////////////
 //
@@ -142,6 +143,8 @@ struct lock *
 lock_create(const char *name)
 {
 	struct lock *lock;
+	lock->owner = NULL;
+	lock->locksLock = sem_create("locksLock", 1);
 
 	lock = kmalloc(sizeof(*lock));
 	if (lock == NULL) {
@@ -169,42 +172,28 @@ lock_destroy(struct lock *lock)
 	// add stuff here as needed
 
 	kfree(lock->lk_name);
+	kfree(lock->locksLock);
 	kfree(lock);
 }
 
 void
 lock_acquire(struct lock *lock)
 {
-	/* Call this (atomically) before waiting for a lock */
-	//HANGMAN_WAIT(&curthread->t_hangman, &lock->lk_hangman);
-
-	// Write this
-
-	(void)lock;  // suppress warning until code gets written
-
-	/* Call this (atomically) once the lock is acquired */
-	//HANGMAN_ACQUIRE(&curthread->t_hangman, &lock->lk_hangman);
+	P(lock->locksLock);
+	lock->owner = curthread->t_name;
 }
 
 void
 lock_release(struct lock *lock)
 {
-	/* Call this (atomically) when the lock is released */
-	//HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);
-
-	// Write this
-
-	(void)lock;  // suppress warning until code gets written
+	K(lock->locksLock);
+	lock->owner = NULL;
 }
 
 bool
 lock_do_i_hold(struct lock *lock)
 {
-	// Write this
-
-	(void)lock;  // suppress warning until code gets written
-
-	return true; // dummy until code gets written
+	return lock->owner == curthread->t_name;
 }
 
 ////////////////////////////////////////////////////////////
