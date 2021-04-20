@@ -141,10 +141,11 @@ struct lock *
 lock_create(const char *name)
 {
 	struct lock *lock;
+	lock = kmalloc(sizeof(*lock));
+	
 	lock->owner = NULL;
 	lock->locksLock = sem_create("locksLock", 1);
 
-	lock = kmalloc(sizeof(*lock));
 	if (lock == NULL) {
 		return NULL;
 	}
